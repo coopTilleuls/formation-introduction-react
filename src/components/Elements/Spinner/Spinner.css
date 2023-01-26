@@ -1,0 +1,10 @@
+@keyframes rotate {
+    from { transform: rotate(0); opacity: 0; }
+    50% { opacity: 1; }
+    to { transform: rotate(360deg); opacity: 0; }
+}
+
+.spinner {
+    height: 40px; text-align: center;
+    animation: rotate 1s infinite;
+}

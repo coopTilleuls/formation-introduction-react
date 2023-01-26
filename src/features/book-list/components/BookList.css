@@ -7,13 +7,8 @@
     display: flex; align-items: center; gap: 4px;
 }
 
-.book-list-order button {
-    border: 0; background: transparent;
-    text-decoration: underline; cursor: pointer;
-}
-
-.book-list-order button:hover {
-    text-decoration: none;
+.book-list-order select {
+    padding: 5px 10px;
 }
 
 .book-list {

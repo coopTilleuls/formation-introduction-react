@@ -1,45 +1,62 @@
 import './BookList.css';
 import {BookCard} from './BookCard';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {Spinner} from '../../../components/Elements';
 
-const books = [
-    {isbn: '9793083416011', title: 'Excepturi explicabo volu…am aut voluptate velit.', author: 'Corbin Ritchie'},
-    {isbn: '9786451149666', title: 'Est est et eveniet porro non.', author: 'Deonte Effertz'},
-    {isbn: '9782736956844', title: 'Tempore ab quis impedit itaque assumenda aut.', author: 'Dr. Abel Gutmann IV'},
-    {
-        isbn: '9790275158155',
-        title: 'Quibusdam quia aut culpa dolores consectetur quod doloremque.',
-        author: 'Prof. Scotty Pfannerstill DVM'
-    },
-    {isbn: '9789899956537', title: 'Qui accusamus et odio explicabo quam accusamus.', author: 'Ms. Alana Murphy'},
-];
+const availableOrders = {isbn: 'Isbn', title: 'Titre', author: 'Auteur⋅rice'}
 
 export const BookList = () => {
-    const [order, setOrder] = useState(null);
+    const [isLoading, setIsloading] = useState(true);
+    const [books, setBooks] = useState([]);
+    const [order, setOrder] = useState("id");
+    const [orderDirection, setOrderDirection] = useState("ASC");
 
-    const orderedBooks = order === null ?
-        books :
-        books.sort((a, b) => {
-            return a[order] < b[order] ? -1 :
-                a[order] > b[order] ? 1 : 0;
-        });
+    useEffect(() => {
+        (async () => {
+            setIsloading(true);
+
+            const requestURL = new URL('https://demo.api-platform.com/books.jsonld');
+            if (order !== "") {
+                requestURL.searchParams.set(`order[${order}]`, orderDirection);
+            }
+            const response = await fetch(requestURL.toString());
+
+            if (response.ok) {
+                const bookCollection = await response.json();
+                setBooks(bookCollection['hydra:member']);
+            }
+
+            setIsloading(false);
+        })();
+    }, [order, orderDirection])
 
     return (
         <>
             <header className="book-list-header">
-                <h1>Livres</h1>
+                <h1> Livres</h1>
                 <p className="book-list-order">
                     Trier par
-                    <button onClick={() => setOrder('isbn')}>isbn</button> -
-                    <button onClick={() => setOrder('title')}>titre</button> -
-                    <button onClick={() => setOrder('author')}>auteur</button>
+                    <select onChange={(e) => setOrder(e.target.value)}>
+                        <option value="id">Date d'ajout</option>
+                        {Object.entries(availableOrders).map(([value, label]) => (
+                            <option key={value} value={value}>{label}</option>
+                        ))}
+                    </select>
+                    <select onChange={(e) => setOrderDirection(e.target.value)}>
+                        <option value="ASC">Ascendant</option>
+                        <option value="DESC">Descendant</option>
+                    </select>
                 </p>
             </header>
-            <div className="book-list">
-                {orderedBooks.map(book => (
-                    <BookCard key={book.isbn} book={book}/>
-                ))}
-            </div>
-        </>
+            {isLoading ? (
+                <Spinner/>
+            ) : (
+                <div className="book-list">
+                    {books.map((book, index) => (
+                        <BookCard key={`${book.isbn}-${index}`} book={book}/>
+                    ))}
+                </div>
+            )}
+        < />
     );
 };

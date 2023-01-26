@@ -1,3 +1,34 @@
+:root {
+    --heart-color: #cc1212;
+}
+
 .book-card {
+    display: flex; flex-direction: column; gap: 15px;
     padding: 15px; box-shadow: 0 0 20px #333; background: #fafafa; border-radius: 5px;
+}
+
+.book-card h3, .book-card p {
+    margin: 0;
+}
+
+.book-card-isbn {
+    flex-grow: 1;
+}
+
+.book-card .wishlist {
+    display: flex; justify-content: center; align-items: center; align-self: flex-end; gap: 5px;
+    padding: 5px 10px; width: 100%; background-color: white; border: 2px solid var(--heart-color); border-radius: 5px;
+    font-size: 1rem; color: var(--heart-color); cursor: pointer;
+    transition: all 200ms ease-in;
+}
+.book-card .wishlist.already-in {
+    background-color: var(--heart-color); color: white;
+}
+
+.book-card .wishlist:hover {
+    background-color: var(--heart-color); color: white;
+}
+
+.book-card .wishlist .icon{
+    font-size: 1.2rem;
 }
