@@ -5,6 +5,7 @@ import {BookCover} from '../Elements/BookCover';
 import {BookReviews} from './BookReviews';
 import {useState} from 'react';
 import {AddReview} from './AddReview';
+import {getBookId} from '../../utils/book';
 
 export const BookView = () => {
     const {book} = JSON.parse(useLoaderData());
@@ -15,14 +16,14 @@ export const BookView = () => {
             <p><Link to="/livres" className={styles.back}>&lt; retour aux livres</Link></p>
             <header className={styles.header}>
                 <h1>{book.title}</h1>
-                <AddToWishlist id={book.id} />
+                <AddToWishlist id={getBookId(book)} />
             </header>
 
             <div className={styles.info}>
-                <BookCover id={book.isbn} />
+                <BookCover id={getBookId(book)} />
                 <div className={styles.meta}>
                     <p><strong>Auteur⋅rice :</strong> {book.author}</p>
-                    <p><strong>Isbn :</strong> {book.isbn}</p>
+                    <p><strong>Isbn :</strong> {getBookId(book)}</p>
                     <p className={styles.description}>{book.description}</p>
                 </div>
             </div>

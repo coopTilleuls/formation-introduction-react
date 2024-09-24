@@ -3,12 +3,12 @@ import {BookCard} from './BookCard';
 import {useEffect, useState} from 'react';
 import {Spinner} from '../../../../components/Elements';
 
-const availableOrders = {isbn: 'Isbn', title: 'Titre', author: 'Auteur⋅rice'}
+const availableOrders = {title: 'Titre', author: 'Auteur⋅rice'}
 
 export const BookList = () => {
     const [isLoading, setIsloading] = useState(true);
     const [books, setBooks] = useState([]);
-    const [order, setOrder] = useState("id");
+    const [order, setOrder] = useState("title");
     const [orderDirection, setOrderDirection] = useState("ASC");
 
     useEffect(() => {
@@ -37,7 +37,6 @@ export const BookList = () => {
                 <p className={styles.order}>
                     Trier par
                     <select onChange={(e) => setOrder(e.target.value)}>
-                        <option value="id">Date d'ajout</option>
                         {Object.entries(availableOrders).map(([value, label]) => (
                             <option key={value} value={value}>{label}</option>
                         ))}

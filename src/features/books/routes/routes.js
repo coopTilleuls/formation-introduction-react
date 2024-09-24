@@ -14,12 +14,10 @@ export const routes = [
             }
 
             const body = Object.fromEntries(await request.formData());
-            body.book = `/books/${params.bookId}`;
-            body.publicationDate = (new Date()).toISOString();
             body.rating = +body.rating;
 
             return await fetch(
-                `https://demo.api-platform.com/reviews`,
+                `https://demo.api-platform.com/books/${params.bookId}/reviews`,
                 {
                     headers: {
                         accept: 'application/ld+json',
@@ -36,7 +34,7 @@ export const routes = [
                 throw new Response("Not Found", {status: 404});
             }
 
-            const reviews = await fetch(`https://demo.api-platform.com/books/${params.bookId}/reviews.jsonld?order[publicationDate]=DESC`)
+            const reviews = await fetch(`https://demo.api-platform.com/books/${params.bookId}/reviews.jsonld?order[publishedAt]=DESC`)
 
             return new Response(JSON.stringify({
                 book: await book.json(),
