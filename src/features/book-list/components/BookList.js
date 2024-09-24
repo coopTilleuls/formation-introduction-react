@@ -2,6 +2,7 @@ import './BookList.css';
 import {BookCard} from './BookCard';
 import {useEffect, useState} from 'react';
 import {Spinner} from '../../../components/Elements';
+import {getBookId} from '../utils/book';
 
 const availableOrders = {isbn: 'Isbn', title: 'Titre', author: 'Auteur⋅rice'}
 
@@ -53,7 +54,7 @@ export const BookList = () => {
             ) : (
                 <div className="book-list">
                     {books.map((book, index) => (
-                        <BookCard key={`${book.isbn}-${index}`} book={book}/>
+                        <BookCard key={`${getBookId(book)}-${index}`} book={book}/>
                     ))}
                 </div>
             )}

@@ -1,5 +1,6 @@
 import './BookCard.css'
 import {useUserContext} from '../../../contexts';
+import {getBookId} from '../utils/book';
 
 export const BookCard = ({book}) => {
     const {wishlist, toggleInWishlist} = useUserContext();
@@ -7,10 +8,10 @@ export const BookCard = ({book}) => {
 
     return (
         <div className="book-card">
-            <img src={`https://picsum.photos/seed/${book.isbn}/300/400`} width="100%" alt=""/>
+            <img src={`https://picsum.photos/seed/${getBookId(book)}/300/400`} width="100%" alt=""/>
             <h3>{book.title}</h3>
             <p>Auteur⋅rice : {book.author}</p>
-            <p className="book-card-isbn">Isbn : {book.isbn}</p>
+            <p className="book-card-isbn">Isbn : {getBookId(book)}</p>
 
             <button
                 className={`wishlist ${isInWishlist ? 'already-in' : ''}`}
