@@ -26,26 +26,31 @@ export const AddReview = () => {
 
         const response = JSON.parse(actionData);
 
-        // form submit is OK
-        if (response['@type'] !== 'ConstraintViolationList') {
-            dispatch({type: 'setAdded'});
-            return;
+        switch(response['@type']) {
+            case 'ConstraintViolationList': {
+                dispatch({type: 'setErrors', errors:
+                      response.violations.reduce((prev, current) => {
+                          return {
+                              ...prev,
+                              [current.propertyPath]: current.message,
+                          }
+                      }, {})
+                });
+            }break;
+            case 'hydra:Error': {
+                dispatch({type: 'setErrors', errors: {global: response.detail}});
+            }break;
+            default: {
+                // form submit is OK
+                dispatch({type: 'setAdded'});
+            }
         }
-
-        // form submit triggered errors
-        dispatch({type: 'setErrors', errors:
-            response.violations.reduce((prev, current) => {
-                return {
-                    ...prev,
-                    [current.propertyPath]: current.message,
-                }
-            }, {})
-        });
     }, [actionData]);
 
     return (
         <Form className="add-review" method="POST" ref={form}>
             {!!state.added && <p className={styles.added}>Votre commentaire a été enregistré avec succès.</p>}
+            {!!state.errors.global && <p className={styles.error}>Vous devez être authentifié pour poster un commentaire.</p>}
             <label className={styles.field}>
                 <span className={styles['label-text']}>Votre nom</span>
                 <input type="text" name="author" className={styles.input} />

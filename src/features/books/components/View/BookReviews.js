@@ -8,12 +8,12 @@ export const BookReviews = () => {
     return (
         <div>
             {reviews['hydra:member'].map((review) => (
-                <div className={styles.review} key={review.id}>
+                <div className={styles.review} key={review['@id']}>
                     <blockquote className={styles.message}>
                         {review.body}
                     </blockquote>
                     <p className={styles.author}>
-                        par {review.author}, le {formatDate(review.publicationDate)}
+                        par {review.author}, le {formatDate(review.publishedAt)}
                     </p>
                 </div>
             ))}
