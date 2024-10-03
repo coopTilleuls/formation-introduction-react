@@ -1,5 +1,7 @@
 :root {
   --heart-color: #cc1212;
+  --grey-light: #ccc;
+  --grey-dark: #333;
 }
 
 * {

@@ -9,6 +9,12 @@
     background-color: var(--heart-color); color: white;
 }
 
+.wishlist:disabled {
+    background-color: var(--grey-light); color: var(--grey-dark);
+    border-color: var(--grey-dark);
+    opacity: .5;
+}
+
 .already-in {
     background-color: var(--heart-color); color: white;
 }
