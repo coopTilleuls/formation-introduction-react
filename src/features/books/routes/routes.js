@@ -1,5 +1,6 @@
 import {BookList} from '../components/List/BookList';
 import {BookView} from '../components/View/BookView';
+import {fetchGet, fetchPost} from '../../../utils/api';
 
 export const routes = [
     {
@@ -16,7 +17,7 @@ export const routes = [
             const body = Object.fromEntries(await request.formData());
             body.rating = +body.rating;
 
-            return await fetch(
+            return await fetchPost(
                 `https://demo.api-platform.com/books/${params.bookId}/reviews`,
                 {
                     headers: {
@@ -28,17 +29,17 @@ export const routes = [
                 });
         },
         loader: async ({params}) => {
-            const book = await fetch(`https://demo.api-platform.com/books/${params.bookId}.jsonld`)
+            const book = await fetchGet(`/books/${params.bookId}.jsonld`);
 
             if (book.status === 404) {
                 throw new Response("Not Found", {status: 404});
             }
 
-            const reviews = await fetch(`https://demo.api-platform.com/books/${params.bookId}/reviews.jsonld?order[publishedAt]=DESC`)
+            const reviews = await fetchGet(`/books/${params.bookId}/reviews.jsonld?order[publishedAt]=DESC`)
 
             return new Response(JSON.stringify({
-                book: await book.json(),
-                reviews: await reviews.json(),
+                book,
+                reviews,
             }));
         },
         path: '/livres/:bookId',

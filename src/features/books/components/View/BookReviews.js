@@ -7,7 +7,7 @@ export const BookReviews = () => {
 
     return (
         <div>
-            {reviews['hydra:member'].map((review) => (
+            {reviews.members.map((review) => (
                 <div className={styles.review} key={review['@id']}>
                     <blockquote className={styles.message}>
                         {review.body}

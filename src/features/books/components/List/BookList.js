@@ -1,31 +1,21 @@
 import styles from './BookList.module.css';
 import {BookCard} from './BookCard';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {Spinner} from '../../../../components/Elements';
 import {getBookId} from '../../utils/book';
 import {LoginButton} from '../../../user/components/LoginButton';
+import {useGetSWR} from '../../../../utils/api';
 
 export const BookList = () => {
-    const [isLoading, setIsloading] = useState(true);
-    const [books, setBooks] = useState([]);
     const [orderDirection, setOrderDirection] = useState("ASC");
 
-    useEffect(() => {
-        (async () => {
-            setIsloading(true);
+    const {isLoading, data} = useGetSWR('/books.jsonld', {'order[title]': orderDirection});
 
-            const requestURL = new URL('https://demo.api-platform.com/books.jsonld');
-            requestURL.searchParams.set('order[title]', orderDirection);
-            const response = await fetch(requestURL.toString());
+    const books = data ? data.members : [];
 
-            if (response.ok) {
-                const bookCollection = await response.json();
-                setBooks(bookCollection['hydra:member']);
-            }
-
-            setIsloading(false);
-        })();
-    }, [orderDirection])
+    if (isLoading) {
+        return <p>chargement...</p>
+    }
 
     return (
         <>
