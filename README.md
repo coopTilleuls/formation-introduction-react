@@ -16,9 +16,9 @@ Le but de cet exercice est d'interroger une API de bibliothèque, d'afficher la 
 
 Pour ce faire :
  
-- modifier le composant de List pour requêter l'API
-- modifier la gestion de l'ordonnancement en utilisant une boîte de selection
-- rendre la liste ordonnable par isbn, titre, auteur ou date de publication en requêtant l'API ([voir la documentation][documentation])
+- modifier le composant BookList pour requêter l'API
+- modifier la gestion de l'ordonnancement en utilisant une boîte de selection pour changer le sens
+- rendre la liste ordonnable titre (ascendant/descendant) en requêtant l'API ([voir la documentation][documentation])
 - ajouter un bouton à chaque Card, permettant d'ajouter/retirer un livre à une wishlist qui doit être globale à tout le site
 
 > Note : pour demander la liste des livres à l'API, vous pouvez adresser une requête GET à [cette adresse](https://demo.api-platform.com/books.jsonld)
