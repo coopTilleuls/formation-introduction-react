@@ -2,8 +2,12 @@ import styles from './AddReview.module.css';
 import {useActionData, useSubmit} from 'react-router-dom';
 import {useEffect, useReducer, useRef} from 'react';
 import {useForm} from 'react-hook-form';
+import {useAtom} from 'jotai';
+import {UserContext} from '../../../../contexts';
 
 export const AddReview = () => {
+    const [userStore] = useAtom(UserContext);
+    const {isConnected, user} = userStore;
     const actionData = useActionData();
     const submit = useSubmit();
     const form = useRef();
@@ -19,8 +23,14 @@ export const AddReview = () => {
                 return currentState;
         }
     }, {errors: {}, added: false});
-    const {formState, register, handleSubmit} = useForm();
+    const {formState, register, handleSubmit, setValue} = useForm({defaultValues: {
+        'author': isConnected ? `${user.firstName} ${user.lastName}` : '',
+        }});
     const {errors} = formState;
+
+    useEffect(() => {
+        setValue('author', (isConnected && user) ? `${user.firstName} ${user.lastName}` : '');
+    }, [isConnected, user])
 
     useEffect(() => {
         // form has not been submitted yet
@@ -61,7 +71,13 @@ export const AddReview = () => {
             {!!state.errors.global && <p className={styles.error}>Vous devez être authentifié pour poster un commentaire.</p>}
             <label className={styles.field}>
                 <span className={styles['label-text']}>Votre nom</span>
-                <input type="text" name="author" className={styles.input} {...register('author', {required: 'Votre nom est requis', minLength: {value: 3, message: 'Votre nom doit comporter au moins 3 caractères'}})}/>
+                <input
+                  type="text"
+                  name="author"
+                  className={styles.input}
+                  {...register('author', {required: 'Votre nom est requis', minLength: {value: 3, message: 'Votre nom doit comporter au moins 3 caractères'}})}
+                  disabled={isConnected}
+                />
                 {errors?.author && <span className={styles.error}>{errors.author.message}</span>}
             </label>
             <label className={styles.field}>

@@ -3,6 +3,7 @@ import {BookCard} from './BookCard';
 import {useEffect, useState} from 'react';
 import {Spinner} from '../../../../components/Elements';
 import {getBookId} from '../../utils/book';
+import {LoginButton} from '../../../user/components/LoginButton';
 
 export const BookList = () => {
     const [isLoading, setIsloading] = useState(true);
@@ -28,6 +29,9 @@ export const BookList = () => {
 
     return (
         <>
+            <div className={styles.loginButton}>
+                <LoginButton />
+            </div>
             <header className={styles.header}>
                 <h1> Livres</h1>
                 <p className={styles.order}>

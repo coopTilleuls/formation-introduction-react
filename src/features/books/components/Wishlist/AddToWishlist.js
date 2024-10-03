@@ -1,22 +1,24 @@
 import styles from './AddToWishlist.module.css';
-import {useUserContext} from '../../../../contexts';
+import {useAtom} from 'jotai';
+import {UserContext} from '../../../../contexts';
 
 export const AddToWishlist = ({ className, id }) => {
-    const {wishlist, toggleInWishlist} = useUserContext();
-    const isInWishlist = wishlist.includes(id);
+    const [userStore, dispatch] = useAtom(UserContext);
+    const {isConnected, wishlist} = userStore;
 
     const handleWishListClick = (e, id) => {
         e.preventDefault();
-        toggleInWishlist(id)
+        dispatch({type: 'toggleInWishList', id})
     }
 
     return (
         <button
-            className={`${styles.wishlist} ${isInWishlist ? styles['already-in'] : ''} ${className}`}
+            className={`${styles.wishlist}  ${className}`}
             onClick={(e) => handleWishListClick(e, id)}
+            disabled={!isConnected}
         >
             <span className={styles.icon}>❤</span>
-            {isInWishlist ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+            {wishlist.includes(id) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
         </button>
     );
 }
