@@ -2,13 +2,11 @@ import styles from './BookList.module.css';
 import {BookCard} from './BookCard';
 import {useEffect, useState} from 'react';
 import {Spinner} from '../../../../components/Elements';
-
-const availableOrders = {title: 'Titre', author: 'Auteur⋅rice'}
+import {getBookId} from '../../utils/book';
 
 export const BookList = () => {
     const [isLoading, setIsloading] = useState(true);
     const [books, setBooks] = useState([]);
-    const [order, setOrder] = useState("title");
     const [orderDirection, setOrderDirection] = useState("ASC");
 
     useEffect(() => {
@@ -16,9 +14,7 @@ export const BookList = () => {
             setIsloading(true);
 
             const requestURL = new URL('https://demo.api-platform.com/books.jsonld');
-            if (order !== "") {
-                requestURL.searchParams.set(`order[${order}]`, orderDirection);
-            }
+            requestURL.searchParams.set('order[title]', orderDirection);
             const response = await fetch(requestURL.toString());
 
             if (response.ok) {
@@ -28,19 +24,14 @@ export const BookList = () => {
 
             setIsloading(false);
         })();
-    }, [order, orderDirection])
+    }, [orderDirection])
 
     return (
         <>
             <header className={styles.header}>
                 <h1> Livres</h1>
                 <p className={styles.order}>
-                    Trier par
-                    <select onChange={(e) => setOrder(e.target.value)}>
-                        {Object.entries(availableOrders).map(([value, label]) => (
-                            <option key={value} value={value}>{label}</option>
-                        ))}
-                    </select>
+                    Trier par titre
                     <select onChange={(e) => setOrderDirection(e.target.value)}>
                         <option value="ASC">Ascendant</option>
                         <option value="DESC">Descendant</option>
@@ -52,7 +43,7 @@ export const BookList = () => {
             ) : (
                 <div className={styles.list}>
                     {books.map((book, index) => (
-                        <BookCard key={`${book.isbn}-${index}`} book={book}/>
+                        <BookCard key={`${getBookId()}-${index}`} book={book}/>
                     ))}
                 </div>
             )}
