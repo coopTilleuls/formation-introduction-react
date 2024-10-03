@@ -16,5 +16,5 @@ Le but de cet exercice est d'afficher une liste de livres en offrant la possibil
 
 Pour ce faire : 
  
-- modifier le composant de `List` pour afficher les livres contenus dans la variable `books` (informations à afficher : isbn, titre et auteur)
+- modifier le composant de `BookList` pour afficher les livres contenus dans la variable `books` (informations à afficher : isbn, titre et auteur)
 - rendre la liste ordonnable par isbn, titre et auteur
