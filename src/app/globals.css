@@ -1,6 +1,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --error: #c20000;
+  --success: #8db46b;
+  --heart-color: #c20000;
+  --grey-light: #ccc;
+  --grey-dark: #333;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,4 +44,11 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.container {
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+  max-width: 900px;
 }

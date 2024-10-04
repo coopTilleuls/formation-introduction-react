@@ -1,11 +1,11 @@
 import styles from './BookCard.module.css'
-import {Link} from 'react-router-dom';
-import {AddToWishlist} from '../Wishlist/AddToWishlist';
-import {BookCover} from '../Elements/BookCover';
-import {getBookId} from '../../utils/book';
+import {AddToWishlist} from '@/features/books';
+import {BookCover} from '@/features/books/components/Elements/BookCover';
+import {getBookId} from '@/features/books/utils/book';
+import Link from 'next/link';
 
 export const BookCard = ({book}) => (
-  <Link to={`/livres/${getBookId(book)}`} className={styles.card}>
+  <Link href={`/livres/${getBookId(book)}`} className={styles.card}>
           <BookCover id={getBookId(book)} />
           <h3>{book.title}</h3>
           <p>Auteur⋅rice : {book.author}</p>

@@ -1,5 +1,5 @@
-import useSWR from 'swr';
 import {fetcher} from './fetcher';
+import useSWR from 'swr';
 
 const baseURL = 'https://demo.api-platform.com';
 

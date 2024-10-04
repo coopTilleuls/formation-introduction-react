@@ -1,15 +1,14 @@
 import styles from './AddReview.module.css';
-import {useActionData, useSubmit} from 'react-router-dom';
 import {useEffect, useReducer, useRef} from 'react';
 import {useForm} from 'react-hook-form';
 import {useAtom} from 'jotai';
-import {UserContext} from '../../../../contexts';
+import {UserContext} from '@/contexts';
 
 export const AddReview = () => {
     const [userStore] = useAtom(UserContext);
     const {isConnected, user} = userStore;
-    const actionData = useActionData();
-    const submit = useSubmit();
+    // const actionData = useActionData();
+    // const submit = useSubmit();
     const form = useRef();
     const [state, dispatch] = useReducer((currentState, action) => {
         switch (action.type) {
@@ -32,37 +31,37 @@ export const AddReview = () => {
         setValue('author', (isConnected && user) ? `${user.firstName} ${user.lastName}` : '');
     }, [isConnected, user])
 
-    useEffect(() => {
-        // form has not been submitted yet
-        if (actionData === undefined) {
-            return;
-        }
-
-        const response = JSON.parse(actionData);
-
-        switch(response['@type']) {
-            case 'ConstraintViolationList': {
-                dispatch({type: 'setErrors', errors:
-                      response.violations.reduce((prev, current) => {
-                          return {
-                              ...prev,
-                              [current.propertyPath]: current.message,
-                          }
-                      }, {})
-                });
-            }break;
-            case 'hydra:Error': {
-                dispatch({type: 'setErrors', errors: {global: response.detail}});
-            }break;
-            default: {
-                // form submit is OK
-                dispatch({type: 'setAdded'});
-            }
-        }
-    }, [actionData]);
+    // useEffect(() => {
+    //     // form has not been submitted yet
+    //     if (actionData === undefined) {
+    //         return;
+    //     }
+    //
+    //     const response = JSON.parse(actionData);
+    //
+    //     switch(response['@type']) {
+    //         case 'ConstraintViolationList': {
+    //             dispatch({type: 'setErrors', errors:
+    //                   response.violations.reduce((prev, current) => {
+    //                       return {
+    //                           ...prev,
+    //                           [current.propertyPath]: current.message,
+    //                       }
+    //                   }, {})
+    //             });
+    //         }break;
+    //         case 'hydra:Error': {
+    //             dispatch({type: 'setErrors', errors: {global: response.detail}});
+    //         }break;
+    //         default: {
+    //             // form submit is OK
+    //             dispatch({type: 'setAdded'});
+    //         }
+    //     }
+    // }, [actionData]);
 
     const doSubmit = () => {
-        submit(form.current);
+        // submit(form.current);
     }
 
     return (

@@ -1,10 +1,12 @@
+'use client';
+
 import styles from './BookList.module.css';
 import {BookCard} from './BookCard';
 import {useState} from 'react';
-import {Spinner} from '../../../../components/Elements';
-import {getBookId} from '../../utils/book';
-import {LoginButton} from '../../../user/components/LoginButton';
-import {useGetSWR} from '../../../../utils/api';
+import {Spinner} from '@/components/Elements';
+import {getBookId} from '@/features/books/utils/book';
+import {LoginButton} from '@/features/user/components/LoginButton';
+import {useGetSWR} from '@/utils/api';
 
 export const BookList = () => {
     const [orderDirection, setOrderDirection] = useState("ASC");

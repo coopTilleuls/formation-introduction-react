@@ -1,9 +1,15 @@
-import {useLoaderData} from 'react-router-dom';
 import styles from './BookReviews.module.css';
-import {formatDate} from '../../../../utils/date';
+import {formatDate} from '@/utils/date';
+import {useParams} from 'next/navigation';
+import {useGetSWR} from '@/utils/api';
 
 export const BookReviews = () => {
-    const {reviews} = JSON.parse(useLoaderData());
+    const {id} = useParams();
+    const {isLoading, data: reviews} = useGetSWR(`/books/${id}/reviews.jsonld`);
+
+    if (isLoading) {
+        return <p>Chargement...</p>
+    }
 
     return (
         <div>
