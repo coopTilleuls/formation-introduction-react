@@ -3,13 +3,16 @@ import {useEffect, useReducer, useRef} from 'react';
 import {useForm} from 'react-hook-form';
 import {useAtom} from 'jotai';
 import {UserContext} from '@/contexts';
+import {useParams} from 'next/navigation';
+import {postReview} from '@/features/books/utils/review';
 
 export const AddReview = () => {
+    const params = useParams();
+
     const [userStore] = useAtom(UserContext);
-    const {isConnected, user} = userStore;
-    // const actionData = useActionData();
-    // const submit = useSubmit();
     const form = useRef();
+    const {isConnected, user} = userStore;
+
     const [state, dispatch] = useReducer((currentState, action) => {
         switch (action.type) {
             case 'setErrors':
@@ -22,6 +25,7 @@ export const AddReview = () => {
                 return currentState;
         }
     }, {errors: {}, added: false});
+
     const {formState, register, handleSubmit, setValue} = useForm({defaultValues: {
         'author': isConnected ? `${user.firstName} ${user.lastName}` : '',
         }});
@@ -31,41 +35,35 @@ export const AddReview = () => {
         setValue('author', (isConnected && user) ? `${user.firstName} ${user.lastName}` : '');
     }, [isConnected, user])
 
-    // useEffect(() => {
-    //     // form has not been submitted yet
-    //     if (actionData === undefined) {
-    //         return;
-    //     }
-    //
-    //     const response = JSON.parse(actionData);
-    //
-    //     switch(response['@type']) {
-    //         case 'ConstraintViolationList': {
-    //             dispatch({type: 'setErrors', errors:
-    //                   response.violations.reduce((prev, current) => {
-    //                       return {
-    //                           ...prev,
-    //                           [current.propertyPath]: current.message,
-    //                       }
-    //                   }, {})
-    //             });
-    //         }break;
-    //         case 'hydra:Error': {
-    //             dispatch({type: 'setErrors', errors: {global: response.detail}});
-    //         }break;
-    //         default: {
-    //             // form submit is OK
-    //             dispatch({type: 'setAdded'});
-    //         }
-    //     }
-    // }, [actionData]);
+    const doSubmit = handleSubmit(async (values) => {
+        const response = await postReview(params.id, values);
 
-    const doSubmit = () => {
-        // submit(form.current);
-    }
+        switch(response['@type']) {
+          case 'ConstraintViolationList': {
+              dispatch({
+                  type: 'setErrors', errors:
+                    response.violations.reduce((prev, current) => {
+                        return {
+                            ...prev,
+                            [current.propertyPath]: current.message,
+                        }
+                    }, {})
+              });
+          }
+              break;
+            case 'Error': {
+                dispatch({type: 'setErrors', errors: {global: response.detail}});
+            }
+                break;
+            default: {
+                // form submit is OK
+                dispatch({type: 'setAdded'});
+            }
+        }
+    })
 
     return (
-        <form className="add-review" method="POST" ref={form} onSubmit={handleSubmit(doSubmit)}>
+        <form action={doSubmit} className="add-review" ref={form}>
             {!!state.added && <p className={styles.added}>Votre commentaire a été enregistré avec succès.</p>}
             {!!state.errors.global && <p className={styles.error}>Vous devez être authentifié pour poster un commentaire.</p>}
             <label className={styles.field}>
