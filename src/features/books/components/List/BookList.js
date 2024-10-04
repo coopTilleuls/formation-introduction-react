@@ -43,7 +43,7 @@ export const BookList = () => {
             ) : (
                 <div className={styles.list}>
                     {books.map((book, index) => (
-                        <BookCard key={`${getBookId()}-${index}`} book={book}/>
+                        <BookCard key={`${getBookId(book)}-${index}`} book={book}/>
                     ))}
                 </div>
             )}
